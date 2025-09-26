@@ -1,4 +1,6 @@
 
+using GenerativeAI.Api.Perguntas;
+
 namespace GenerativeAI.Api
 {
     public class Program
@@ -25,8 +27,10 @@ namespace GenerativeAI.Api
                 {
                     throw new InvalidOperationException("A chave da API Gemini não foi carregada. Verifique o caminho do arquivo e as permissões.");
                 }
-                return new GenerativeModel(apiKey: apiKey, model: "gemini-1.5-flash-latest");
+                return new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
             });
+
+            builder.Services.AddSingleton<PerguntarSobreCarros>();
 
 
             builder.Services.AddControllers();
