@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GenerativeAI.Servico;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GenerativeAI.Api.Controllers
 {
@@ -9,18 +10,20 @@ namespace GenerativeAI.Api.Controllers
         private readonly GenerativeModel _model;
         public Gemini2Controller()
         {
-            string apiKey;
-            try
-            {
-                string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
-                apiKey = System.IO.File.ReadAllText(filePath).Trim();
-            }
-            catch (Exception ex)
-            {
-                apiKey = "";
-                Console.WriteLine($"Falha ao ler a chave da API do arquivo: {ex.Message}");
-            }
-            _model = new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
+            //string apiKey;
+            //try
+            //{
+            //    string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
+            //    apiKey = System.IO.File.ReadAllText(filePath).Trim();
+            //}
+            //catch (Exception ex)
+            //{
+            //    apiKey = "";
+            //    Console.WriteLine($"Falha ao ler a chave da API do arquivo: {ex.Message}");
+            //}
+            //_model = new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
+
+            _model = new GenerativeModelServico().Obter();
         }
 
 

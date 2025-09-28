@@ -1,5 +1,6 @@
 
 using GenerativeAI.Api.Perguntas;
+using GenerativeAI.Servico;
 
 namespace GenerativeAI.Api
 {
@@ -9,17 +10,19 @@ namespace GenerativeAI.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string apiKey = "";
-            try
-            {
-                string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
-                apiKey = System.IO.File.ReadAllText(filePath).Trim();
-                Console.WriteLine("Chave da API Gemini carregada com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ERRO FATAL: Falha ao ler a chave da API do arquivo: {ex.Message}. A API não funcionará.");
-            }
+            //string apiKey = "";
+            //try
+            //{
+            //    string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
+            //    apiKey = System.IO.File.ReadAllText(filePath).Trim();
+            //    Console.WriteLine("Chave da API Gemini carregada com sucesso.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"ERRO FATAL: Falha ao ler a chave da API do arquivo: {ex.Message}. A API não funcionará.");
+            //}
+
+            string apiKey = new GenerativeModelServico().ObterChave();
 
             builder.Services.AddSingleton(sp =>
             {

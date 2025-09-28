@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerativeAI.Console", "Gen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerativeAI.Api", "GenerativeAI.Api\GenerativeAI.Api.csproj", "{99A40BDE-6853-4BC2-B647-3FF26795F658}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nucleo", "Nucleo", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerativeAI.Servico", "GenerativeAI.Servico\GenerativeAI.Servico.csproj", "{74526F02-0A06-4CE9-88AF-54F087CE9CFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{99A40BDE-6853-4BC2-B647-3FF26795F658}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99A40BDE-6853-4BC2-B647-3FF26795F658}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99A40BDE-6853-4BC2-B647-3FF26795F658}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74526F02-0A06-4CE9-88AF-54F087CE9CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74526F02-0A06-4CE9-88AF-54F087CE9CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74526F02-0A06-4CE9-88AF-54F087CE9CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74526F02-0A06-4CE9-88AF-54F087CE9CFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{74526F02-0A06-4CE9-88AF-54F087CE9CFC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0D9F0EF-8280-4DB3-84D7-D8763FE93BCE}

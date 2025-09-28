@@ -1,4 +1,7 @@
 ﻿using GenerativeAI.Api.Perguntas;
+using GenerativeAI.Servico;
+using GenerativeAI.Servico.Dto;
+using GenerativeAI.Types;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenerativeAI.Api.Controllers
@@ -7,28 +10,11 @@ namespace GenerativeAI.Api.Controllers
     [Route("api/[controller]")]
     public class GeminiController : ControllerBase
     {
- 
-
         private readonly GenerativeModel _model;
-
         private readonly PerguntarSobreCarros _PerguntarSobreCarros; 
-
 
         public GeminiController(GenerativeModel model, PerguntarSobreCarros perguntarSobreCarros)
         {
-            //string apiKey;
-            //try
-            //{
-            //    string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
-            //    apiKey = System.IO.File.ReadAllText(filePath).Trim();
-            //}
-            //catch (Exception ex)
-            //{
-            //    apiKey = "";
-            //    Console.WriteLine($"Falha ao ler a chave da API do arquivo: {ex.Message}");
-            //}
-            //_model = new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
-
             _model = model;
             _PerguntarSobreCarros = perguntarSobreCarros;
         }
@@ -36,10 +22,8 @@ namespace GenerativeAI.Api.Controllers
         [HttpPost("perguntar")]
         public async Task<IActionResult> Perguntar([FromBody] PerguntaRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Pergunta))
-            {
-                return BadRequest(new { error = "O campo 'pergunta' não pode ser vazio." });
-            }
+            if (request == null || string.IsNullOrWhiteSpace(request.Pergunta))
+                return BadRequest("A pergunta não pode ser vazia.");
 
             try
             {
@@ -53,92 +37,40 @@ namespace GenerativeAI.Api.Controllers
             }
         }
 
-
-        [HttpPost("perguntarCarros")]
-        public async Task<IActionResult> PerguntarSobreCarros([FromBody] PerguntaRequest perguntaRequest)
+        [HttpPost("PromptEspecialistaManutencao")]
+        public async Task<IActionResult> PromptEspecialistaManutencao([FromBody] PerguntaRequest request)
         {
-            if (string.IsNullOrWhiteSpace(perguntaRequest.Pergunta))
-            {
-                return BadRequest(new { error = "O campo 'pergunta' não pode ser vazio." });
-            }
-            try
-            {
-                string promptFinal = $@"
-                Você é um assistente especialista em carros. Sua única função é responder a perguntas sobre veículos usando ESTRITAMENTE as informações fornecidas no contexto abaixo.
-                Se a resposta não estiver no contexto, diga apenas: 'Desculpe, não encontrei informações sobre isso na minha base de dados.'
-                Não use nenhum conhecimento externo.
+            if (request == null || string.IsNullOrWhiteSpace(request.Pergunta))
+                return BadRequest("A pergunta não pode ser vazia.");
 
-                Pergunta do usuário: {perguntaRequest.Pergunta}
 
-                Resposta:
+            string persona = @"Você é um especialista em manutenção de máquinas industriais e de construção civil e predial, 
+                com amplo conhecimento em manutenção preventiva, preditiva e corretiva. Sua função é fornecer respostas técnicas, detalhadas e práticas, 
+                considerando boas práticas e normas de segurança, sempre explique de forma clara e estruturada. 
+                Se não souber a resposta, diga: Desculpe, não encontrei informações sobre isso na minha base de dados.";
+
+            string contexto = @"
+                - Tipos de máquinas: escavadeiras, guindastes, empilhadeiras, prensas industriais, tornos.
+                - Manutenção preventiva: inspeções periódicas, lubrificação, troca de filtros, calibragem.
+                - Manutenção preditiva: monitoramento por sensores (vibração, temperatura, pressão), análise de falhas, histórico de operação.
+                - Manutenção corretiva: reparos após falha, substituição de peças danificadas, diagnóstico de problemas.
+                - Normas de segurança: uso de EPIs, bloqueio de energia antes de manutenção, registro de manutenções.
                 ";
 
-                var response = await _model.GenerateContentAsync(promptFinal);
-                return Ok(new { resposta = response.Text() });
-            }
-            catch (Exception ex)
+            PromptDto promptDto = new PromptDto(persona, contexto, request.Pergunta);
+            
+            String texto = promptDto.ToString();
+            GenerateContentResponse response = await _model.GenerateContentAsync(texto);
+
+            return Ok(new
             {
-                Console.WriteLine($"Erro na chamada da API Gemini: {ex.Message}");
-                return StatusCode(500, new { error = "Ocorreu um erro ao se comunicar com a API Gemini.", details = ex.Message });
-            }
+                Pergunta = request.Pergunta,
+                Resposta = response.Text
+            });
         }
 
-   
-
-    
-        [HttpPost("perguntarCarros2")]
-        public async Task<IActionResult> PerguntarSobreCarros2([FromBody] PerguntaRequest perguntaRequest)
-        {
-            if (string.IsNullOrWhiteSpace(perguntaRequest.Pergunta))
-            {
-                return BadRequest(new { error = "O campo 'pergunta' não pode ser vazio." });
-            }
-
-            try
-            {
-                // --- ETAPA 1: BUSCAR CONTEXTO (Retrieval) Usamos nosso serviço para encontrar os trechos de texto mais relevantes para a pergunta do usuário em nossa base de conhecimento.
-                Console.WriteLine($"Buscando contexto para a pergunta: '{perguntaRequest.Pergunta}'");
-                List<string> dadosRelevantes = _PerguntarSobreCarros.BuscarInformacoes(perguntaRequest.Pergunta);
-
-                // Juntamos os trechos encontrados em uma única string de contexto.
-                string contexto = string.Join("\n---\n", dadosRelevantes);
-                Console.WriteLine($"Contexto encontrado:\n{contexto}");
-
-
-                // --- ETAPA 2: MONTAR O PROMPT AUMENTADO, criamos o prompt final, combinando as instruções, o contexto e a pergunta.
-                string promptFinal = $@"
-                    Você é um assistente virtual especialista em automóveis.
-                    Sua tarefa é responder à pergunta do usuário baseando-se ÚNICA E EXCLUSIVAMENTE no contexto fornecido abaixo.
-                    - Se a informação estiver no contexto, responda de forma clara e direta.
-                    - Se a informação não estiver no contexto, responda exatamente com: 'Desculpe, não encontrei informações sobre isso na minha base de dados.'
-                    - Não utilize nenhum conhecimento prévio ou externo.
-
-                    --- CONTEXTO ---
-                    {contexto}
-                    --- FIM DO CONTEXTO ---
-
-                    Pergunta do usuário: {perguntaRequest.Pergunta}
-
-                    Resposta:
-                    ";
-                Console.WriteLine($"\n--- PROMPT FINAL ENVIADO PARA A GEMINI ---\n{promptFinal}");
-
-
-                // --- ETAPA 3: CHAMAR A API GEMINI --- enviamos o prompt completo e detalhado para o modelo.
-                var response = await _model.GenerateContentAsync(promptFinal);
-
-                return Ok(new { resposta = response.Text() });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro na chamada da API Gemini: {ex.Message}");
-                return StatusCode(500, new { error = "Ocorreu um erro ao se comunicar com a API Gemini.", details = ex.Message });
-            }
-        }
+ 
     }
 
-    public class PerguntaRequest
-    {
-        public string Pergunta { get; set; }
-    }
+ 
 }
