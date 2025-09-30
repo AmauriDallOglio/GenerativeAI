@@ -1,5 +1,3 @@
-
-using GenerativeAI.Api.Perguntas;
 using GenerativeAI.Servico;
 
 namespace GenerativeAI.Api
@@ -33,7 +31,6 @@ namespace GenerativeAI.Api
                 return new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
             });
 
-            builder.Services.AddSingleton<PerguntarSobreCarros>();
 
 
             builder.Services.AddControllers();

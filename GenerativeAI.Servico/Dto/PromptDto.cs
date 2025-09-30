@@ -17,7 +17,7 @@
             };
         }
 
-        public override string ToString()
+        public string FormataToString()
         {
             return string.Join("\n", Mensagens.Select(m => $"{m.Papel.ToUpper()}: {m.Conteudo}"));
         }
