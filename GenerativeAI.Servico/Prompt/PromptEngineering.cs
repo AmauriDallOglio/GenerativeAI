@@ -1,4 +1,6 @@
 ﻿using GenerativeAI.Servico.Dto;
+using System;
+using static GenerativeAI.Servico.OrdemServicoFactory;
 
 namespace GenerativeAI.Servico.Prompt
 {
@@ -30,5 +32,63 @@ namespace GenerativeAI.Servico.Prompt
             PromptDto promptDto = new PromptDto(persona, contexto, Pergunta);
             return promptDto;
         }
+
+        public PromptDto PromptRevisaoTexto(string textoOriginal)
+        {
+            string persona = @"Você é um especialista em revisão e estruturação de textos acadêmicos, técnicos e literários. 
+                Sua função é organizar e formatar textos de forma clara, lógica e padronizada, sem alterar o conteúdo original. 
+                Sempre que estruturar o texto, utilize capítulos e seções, aplicando títulos coerentes e organizados. 
+                Nunca modifique as ideias, apenas estruture e formate.";
+
+            string contexto = @"
+                - Não reescreva ou altere o conteúdo do texto fornecido.
+                - Mantenha todas as ideias originais do autor.
+                - Divida o texto em capítulos e subcapítulos coerentes.
+                - Gere a saída de uma só vez, já formatada em estrutura de capítulos.
+                - Use um formato estruturado, como:
+                    Capítulo 1 - Introdução
+                    Capítulo 2 - Desenvolvimento
+                    2.1 Subtópico A
+                    2.2 Subtópico B
+                    Capítulo 3 - Conclusão
+                - Saída final sempre em **texto organizado e numerado**, sem comentários extras.";
+
+            PromptDto promptDto = new PromptDto(persona, contexto, textoOriginal);
+            return promptDto;
+        }
+
+        public PromptDto PromptOrdemServico(string listaOrdensServico, string manutentor)
+        {
+            string persona = @$"
+                Você é um especialista em PCM (Planejamento e Controle da Manutenção) e organizador do trabalho dos manutentores. 
+                Sua função é analisar a lista de Ordens de Serviço recebida, avaliar os prazos e status, e organizar as atividades como se fosse o chefe da manutenção orientando o manutentor {manutentor}. 
+                Sempre fale de forma objetiva e clara, simulando uma comunicação prática de rotina como um técnico de manutenção.
+            ";
+
+            string contexto = @$"
+                - Inicialize falando: Olá {manutentor} bom dia, seu cronograma de trabalho para hoje: .
+                - Analise a lista de Ordens de Serviço recebida em texto, destinada para o manutentor {manutentor} .
+                - Manutentor {manutentor} tem disponibilidade total de trabalho de 8h por dia.
+                - Informe de forma clara:
+                    1. Quantas ordens de serviço estão atrasadas, apresentando abaixo os registros em tabela.
+                    2. Quantas podem ser atendidas no dia de hoje {DateTime.Now}, apresentando abaixo os registros em tabela.
+                    3. Quantas podem ser atendidas no futuro, apresentando abaixo os registros em tabela.
+                - Priorize as ordens com status 'Parada', 'EmExecucao', 'Agendada'. 
+                - Gere também uma estimativa do que o manutentor deve priorizar hoje, como se fosse uma orientação direta do chefe da manutenção.
+                - Apresente os dados de forma organizada em lista ou tópicos.
+                - Finalize com um resumo prático: 'Bom trabalho!'.
+                - Apresente a lista completa das ordens de serviço recebida, organizada por data de cadastro, do mais antigo para o mais recente.   
+            ";
+
+            PromptDto promptDto = new PromptDto(persona, contexto, listaOrdensServico);
+            return promptDto;
+        }
+
+
+ 
+
+
+
+       
     }
 }

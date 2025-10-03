@@ -61,7 +61,38 @@ namespace GenerativeAI.Api.Controllers
 
         }
 
+
+
+
+        [HttpPost("EspecialistaOrdemServico")]
+        public async Task<IActionResult> EspecialistaOrdemServico([FromBody] ManutentorDto manutentorDto)
+        {
+            if (manutentorDto == null || string.IsNullOrWhiteSpace(manutentorDto.Nome))
+                return BadRequest("A pergunta não pode ser vazia.");
+
+
+          
+            var lista = new OrdemServicoFactory().GerarListaOrdensServico(manutentorDto.Nome, "Manutentor 2");
+            var prompt = new OrdemServicoFactory().ConverterParaTexto(lista);
+
+            PromptDto promptDto = new PromptEngineering().PromptOrdemServico(prompt, "Amauri");
+
+            String texto = promptDto.FormataToString();
+            GenerateContentResponse response = await _model.GenerateContentAsync(texto);
+
+            //var json Ok(new
+            //{
+            //    Pergunta = request.Pergunta,
+            //    Resposta = response.Text
+            //});
+
+            return Content(response.Text, "application/json");
+
+        }
+
+
  
+
     }
 
  
