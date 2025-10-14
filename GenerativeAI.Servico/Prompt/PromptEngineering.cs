@@ -68,7 +68,8 @@ namespace GenerativeAI.Servico.Prompt
             string contexto = @$"
                 - Inicialize falando: Olá {manutentor} bom dia, seu cronograma de trabalho para hoje: .
                 - Analise a lista de Ordens de Serviço recebida em texto, destinada para o manutentor {manutentor} .
-                - Manutentor {manutentor} tem disponibilidade total de trabalho de 8h por dia.
+                - Manutentor {manutentor} tem disponibilidade total de trabalho de 8h por dia, iniciando seu turno as 05:00 até as 13:30, parando das 09:00 até as 09:30 para descanso.
+                - Calculando meu inicio de trabalho na hora de execução desse prompt.
                 - Informe de forma clara:
                     1. Quantas ordens de serviço estão atrasadas, apresentando abaixo os registros em tabela.
                     2. Quantas podem ser atendidas no dia de hoje {DateTime.Now}, apresentando abaixo os registros em tabela.
@@ -77,7 +78,7 @@ namespace GenerativeAI.Servico.Prompt
                 - Gere também uma estimativa do que o manutentor deve priorizar hoje, como se fosse uma orientação direta do chefe da manutenção.
                 - Apresente os dados de forma organizada em lista ou tópicos.
                 - Finalize com um resumo prático: 'Bom trabalho!'.
-                - Apresente a lista completa das ordens de serviço recebida, organizada por data de cadastro, do mais antigo para o mais recente.   
+                - Apresente a lista completa das ordens de serviço recebida, organizada por data de cadastro, do mais antigo para o mais recente.
             ";
 
             PromptDto promptDto = new PromptDto(persona, contexto, listaOrdensServico);
@@ -85,10 +86,32 @@ namespace GenerativeAI.Servico.Prompt
         }
 
 
- 
+        public PromptDto PromptOrdemServicoHtml(string listaOrdensServico, string manutentor)
+        {
+            string persona = @$"
+                Você é um especialista em PCM (Planejamento e Controle da Manutenção) e organizador do trabalho dos manutentores. 
+                Sua função é analisar a lista de Ordens de Serviço recebida, avaliar os prazos e status, e organizar as atividades como se fosse o chefe da manutenção orientando o manutentor {manutentor}. 
+                Sempre fale de forma objetiva e clara, simulando uma comunicação prática de rotina como um técnico de manutenção.
+            ";
+
+            string contexto = @$"
+                - Inicialize falando: Olá {manutentor} bom dia, seu cronograma de trabalho para hoje: .
+                - Analise a lista de Ordens de Serviço recebida em texto, destinada para o manutentor {manutentor} .
+                - Manutentor {manutentor} tem disponibilidade total de trabalho de 8h por dia, iniciando seu turno as 05:00 até as 13:30, parando das 09:00 até as 09:30 para descanso.
+                - Calculando meu inicio de trabalho na hora de execução desse prompt.
+                - Priorize as ordens com status 'Parada', 'EmExecucao', 'Agendada'. 
+                - Gere também uma estimativa do que o manutentor deve priorizar hoje, como se fosse uma orientação direta do chefe da manutenção.
+                - Finalize com um resumo prático: 'Bom trabalho!'.
+                - Gere a resposta em html e css para ser apresentada em um navegador.
+            ";
+
+            PromptDto promptDto = new PromptDto(persona, contexto, listaOrdensServico);
+            return promptDto;
+        }
 
 
 
-       
+
+
     }
 }
