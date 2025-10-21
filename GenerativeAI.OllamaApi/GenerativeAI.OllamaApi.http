@@ -1,0 +1,6 @@
+@GenerativeAI.OllamaApi_HostAddress = http://localhost:5293
+
+GET {{GenerativeAI.OllamaApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

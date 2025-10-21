@@ -68,10 +68,10 @@ namespace GenerativeAI.Api.Controllers
         public async Task<IActionResult> EspecialistaOrdemServico([FromBody] ManutentorDto manutentorDto)
         {
             if (manutentorDto == null || string.IsNullOrWhiteSpace(manutentorDto.Nome))
-                return BadRequest("A pergunta não pode ser vazia.");
+                return BadRequest(new { erro = "O nome do manutentor não pode ser vazio." });
 
 
-          
+
             var lista = new OrdemServicoFactory().GerarListaOrdensServico(manutentorDto.Nome, "Manutentor 2");
             var prompt = new OrdemServicoFactory().ConverterParaTexto(lista);
 
@@ -95,7 +95,7 @@ namespace GenerativeAI.Api.Controllers
         public async Task<IActionResult> EspecialistaOrdemServicoHtml([FromBody] ManutentorDto manutentorDto)
         {
             if (manutentorDto == null || string.IsNullOrWhiteSpace(manutentorDto.Nome))
-                return BadRequest("A pergunta não pode ser vazia.");
+                return BadRequest(new { erro = "O nome do manutentor não pode ser vazio." });
 
 
 
