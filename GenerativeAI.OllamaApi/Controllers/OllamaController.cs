@@ -1,8 +1,8 @@
-﻿using GenerativeAI.Servico.Dto;
+﻿using GenerativeAI.Servico;
+using GenerativeAI.Servico.Dto;
 using GenerativeAI.Servico.Prompt;
-using GenerativeAI.Servico;
 using GenerativeAI.Servico.Servicos;
-using GenerativeAI.Types;
+using GenerativeAI.Servico.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenerativeAI.OllamaApi.Controllers
@@ -23,14 +23,17 @@ namespace GenerativeAI.OllamaApi.Controllers
         public async Task<IActionResult> Perguntar([FromQuery] string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))
-                return BadRequest(new { erro = "Informe uma pergunta válida." });
+                return BadRequest(Resultado<string>.Falha("Informe uma pergunta válida."));
 
-            var resposta = await _OllamaServico.PerguntarAsync(texto);
-            return Ok(new
-            {
-                pergunta = texto,
-                resposta
-            });
+            var resultado = await _OllamaServico.PerguntarAsync(texto);
+
+            if (!resultado.Sucesso)
+                return StatusCode(500, resultado);
+
+            return Ok(resultado);
+
+
+
         }
 
 
@@ -49,9 +52,11 @@ namespace GenerativeAI.OllamaApi.Controllers
             PromptDto promptDto = new PromptEngineering().PromptOrdemServico(prompt, "Amauri");
 
             string texto = promptDto.FormataToString();
- 
-            string response = await _OllamaServico.PerguntarAsync(texto);
 
+            var resultado = await _OllamaServico.PerguntarAsync(texto);
+
+            if (!resultado.Sucesso)
+                return StatusCode(500, resultado);
 
             //var json Ok(new
             //{
@@ -59,7 +64,7 @@ namespace GenerativeAI.OllamaApi.Controllers
             //    Resposta = response.Text
             //});
 
-            return Content(response, "application/json");
+            return Content(resultado.Mensagem, "application/json");
 
             //var jsonResponse = Ok(new
             //{
@@ -93,16 +98,19 @@ namespace GenerativeAI.OllamaApi.Controllers
             PromptDto promptDto = new PromptEngineering().PromptOrdemServicoHtml(prompt, "Amauri");
 
             String texto = promptDto.FormataToString();
-            string response = await _OllamaServico.PerguntarAsync(texto);
+            var resultado = await _OllamaServico.PerguntarAsync(texto);
 
- 
+            if (!resultado.Sucesso)
+                return StatusCode(500, resultado);
+
+
             //var json Ok(new
             //{
             //    Pergunta = request.Pergunta,
             //    Resposta = response.Text
             //});
 
-            return Content(response, "application/json");
+            return Content(resultado.Mensagem, "application/json");
 
             //var jsonResponse = Ok(new
             //{

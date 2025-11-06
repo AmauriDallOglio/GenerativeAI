@@ -1,4 +1,5 @@
 
+using GenerativeAI.OllamaApi.Util;
 using GenerativeAI.Servico.Dto;
 using GenerativeAI.Servico.Servicos;
 
@@ -45,14 +46,17 @@ namespace GenerativeAI.OllamaApi
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseDeveloperExceptionPage();
             }
+            app.UseMiddlewareLog();
 
             app.UseHttpsRedirection();
-
+            app.UseRouting();
             app.UseAuthorization();
-
+           
 
             app.MapControllers();
+ 
 
             app.Run();
         }
