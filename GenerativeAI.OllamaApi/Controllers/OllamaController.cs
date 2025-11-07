@@ -4,6 +4,7 @@ using GenerativeAI.Servico.Prompt;
 using GenerativeAI.Servico.Servicos;
 using GenerativeAI.Servico.Util;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GenerativeAI.OllamaApi.Controllers
 {
@@ -11,17 +12,22 @@ namespace GenerativeAI.OllamaApi.Controllers
     [Route("api/[controller]")]
     public class OllamaController : ControllerBase
     {
-
+        private readonly ILogger<OllamaController> _logger;
         private readonly OllamaHttpServico _OllamaServico;
 
-        public OllamaController(OllamaHttpServico ollamaServico)
+        public OllamaController(OllamaHttpServico ollamaServico, ILogger<OllamaController> logger)
         {
             _OllamaServico = ollamaServico;
+            _logger = logger;
         }
 
         [HttpGet("pergunta")]
         public async Task<IActionResult> Perguntar([FromQuery] string texto)
         {
+            _logger.LogInformation("[Middleware iniciado]");
+            _logger.LogWarning("[Middleware iniciou com um warning]");
+            _logger.LogError("[Middleware iniciou com erro simulado]");
+
             if (string.IsNullOrWhiteSpace(texto))
                 return BadRequest(Resultado<string>.Falha("Informe uma pergunta válida."));
 
