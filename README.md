@@ -1,6 +1,17 @@
 # GenerativeAI
 
-Este é um projeto simples em C# que demonstra a integração com a API do Gemini do Google para a geração de texto e conversas interativas. O projeto é um aplicativo de console que utiliza a biblioteca oficial do Google para .NET, permitindo que o modelo responda a perguntas e mantenha o contexto de uma conversa.
+GenerativeAI
+
+O projeto GenerativeAI é responsável pela orquestração de toda a solução.
+
+Responsabilidades
+- Autenticação dos usuários (JWT)
+- Chamada dos serviços internos
+- Orquestração entre RAG e ML.NET
+- Centralização das configurações
+- Envio automático da API Key
+
+Demonstra a integração com a API do Gemini do Google para a geração de texto e conversas interativas. O projeto é um aplicativo de console que utiliza a biblioteca oficial do Google para .NET, permitindo que o modelo responda a perguntas e mantenha o contexto de uma conversa.
 
 * IA Generativa: É um tipo de inteligência artificial capaz de criar novos conteúdos, como textos, imagens, sons ou códigos, a partir de grandes volumes de dados aprendidos. Diferente de sistemas que apenas classificam ou recuperam informações, a IA generativa inventa e produz saídas inéditas com base no que recebe como entrada.
 
