@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GenerativeAI.Aplicacao\GenerativeAI.Aplicacao.csproj" />
     <ProjectReference Include="..\GenerativeAI.Servico\GenerativeAI.Servico.csproj" />
   </ItemGroup>
 

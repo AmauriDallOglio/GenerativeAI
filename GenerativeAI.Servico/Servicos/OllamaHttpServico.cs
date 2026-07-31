@@ -1,5 +1,5 @@
-﻿using GenerativeAI.Servico.Dto;
-using GenerativeAI.Servico.Util;
+﻿using GenerativeAI.Aplicacao.Util;
+using GenerativeAI.Servico.Dto;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text;
@@ -19,7 +19,7 @@ namespace GenerativeAI.Servico.Servicos
             _logger = logger;
         }
 
-        public async Task<Resultado<string>> PerguntarAsync(string prompt)
+        public async Task<ResultadoOperacao<string>> PerguntarAsync(string prompt)
         {
             var body = new
             {
@@ -42,7 +42,7 @@ namespace GenerativeAI.Servico.Servicos
                 {
                     var erro = await response.Content.ReadAsStringAsync();
                     _logger.LogError("Erro ao comunicar com Ollama: {Erro}", erro);
-                    return Resultado<string>.Falha($"Erro ao comunicar com o Ollama: {erro}");
+                    return ResultadoOperacao<string>.Falha($"Erro ao comunicar com o Ollama: {erro}");
                 }
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -51,12 +51,12 @@ namespace GenerativeAI.Servico.Servicos
                 var resposta = doc.RootElement.TryGetProperty("response", out var respostaJson)
                           ? respostaJson.GetString() ?? string.Empty
                           : json;
-                return Resultado<string>.Ok(resposta, "Resposta obtida com sucesso!");
+                return ResultadoOperacao<string>.Ok(resposta, "Resposta obtida com sucesso!");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao logar a pergunta para Ollama");
-                return Resultado<string>.Falha($"Erro ao comunicar com o Ollama: {ex.Message}");
+                return ResultadoOperacao<string>.Falha($"Erro ao comunicar com o Ollama: {ex.Message}");
             }
             
 

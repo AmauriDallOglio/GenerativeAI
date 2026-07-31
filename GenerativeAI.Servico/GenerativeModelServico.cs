@@ -1,43 +1,33 @@
-﻿namespace GenerativeAI.Servico
+﻿using Microsoft.Extensions.Configuration;
+
+namespace GenerativeAI.Servico
 {
     public class GenerativeModelServico
     {
- 
- 
+        private readonly IConfiguration _configuration;
 
-        public GenerativeModelServico( )
-        { 
- 
+        public GenerativeModelServico(IConfiguration configuration)
+        {
+            _configuration = configuration;
         }
 
         public string ObterChave()
         {
-            string apiKey = "";
-            try
+            var apiKey = _configuration["Gemini:ApiKey"]?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(apiKey))
             {
-                string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
-                Console.WriteLine("Chave da API Gemini carregada com sucesso.");
-                return apiKey = System.IO.File.ReadAllText(filePath).Trim();
+                Console.WriteLine("ERRO FATAL: A chave da API Gemini não foi configurada. Defina Gemini:ApiKey no appsettings ou nas variáveis de ambiente.");
+                return string.Empty;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ERRO FATAL: Falha ao ler a chave da API do arquivo: {ex.Message}. A API não funcionará.");
-                return apiKey;
-            }
+
+            Console.WriteLine("Chave da API Gemini carregada com sucesso.");
+            return apiKey;
         }
+
         public GenerativeModel Obter()
         {
-            string apiKey;
-            try
-            {
-                string filePath = "C:\\Amauri\\GitHub\\GeminiKey.txt";
-                apiKey = System.IO.File.ReadAllText(filePath).Trim();
-            }
-            catch (Exception ex)
-            {
-                apiKey = "";
-                Console.WriteLine($"Falha ao ler a chave da API do arquivo: {ex.Message}");
-            }
+            var apiKey = ObterChave();
             return new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
         }
     }

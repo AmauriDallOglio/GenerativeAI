@@ -1,8 +1,8 @@
-﻿using GenerativeAI.Servico;
+﻿using GenerativeAI.Aplicacao.Util;
+using GenerativeAI.Servico;
 using GenerativeAI.Servico.Dto;
 using GenerativeAI.Servico.Prompt;
 using GenerativeAI.Servico.Servicos;
-using GenerativeAI.Servico.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -29,7 +29,7 @@ namespace GenerativeAI.OllamaApi.Controllers
             _logger.LogError("[Middleware iniciou com erro simulado]");
 
             if (string.IsNullOrWhiteSpace(texto))
-                return BadRequest(Resultado<string>.Falha("Informe uma pergunta válida."));
+                return BadRequest(ResultadoOperacao<string>.Falha("Informe uma pergunta válida."));
 
             var resultado = await _OllamaServico.PerguntarAsync(texto);
 
