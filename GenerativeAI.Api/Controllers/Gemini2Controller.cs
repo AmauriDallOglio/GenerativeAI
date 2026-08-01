@@ -1,6 +1,5 @@
 ﻿using GenerativeAI.Servico;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace GenerativeAI.Api.Controllers
 {

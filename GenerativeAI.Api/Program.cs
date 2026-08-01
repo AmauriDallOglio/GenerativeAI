@@ -1,6 +1,4 @@
 using GenerativeAI.Api.Configuracao;
-using GenerativeAI.Servico;
-using GenerativeAI.Servico.Servicos;
 
 namespace GenerativeAI.Api
 {

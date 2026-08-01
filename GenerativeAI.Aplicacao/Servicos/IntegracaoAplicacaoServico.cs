@@ -58,5 +58,9 @@ namespace GenerativeAI.Aplicacao.Servicos
             ResultadoOperacao<object> resultado = await _mlNetIntegracaoServico.ObterSessoesAsync(cancellationToken);
             return resultado;
         } 
+
+
+
+
     }
 }
