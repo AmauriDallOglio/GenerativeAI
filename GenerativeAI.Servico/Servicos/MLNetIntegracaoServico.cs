@@ -29,7 +29,7 @@ namespace GenerativeAI.Servico.Servicos
             return resultado;
         }
        
-        public async Task<ResultadoOperacao<object>> ObterRespostaTreinamentoAsync(CancellationToken cancellationToken = default)
+        public async Task<ResultadoOperacao<object>> ObterRespostaTreinamentoAsync(string pergunta, CancellationToken cancellationToken = default)
         {
             ResultadoOperacao<object> resultado = await ExecuteGetAsync("api/MLNet/ObterRespostaTreinamento", cancellationToken);
             return resultado;

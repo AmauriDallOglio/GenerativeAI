@@ -14,7 +14,7 @@ namespace GenerativeAI.Aplicacao.Rotas.IntegracaoRota
 
         public async Task<ResultadoOperacao<object>> Executar(ObterRespostaTreinamentoRequest request, CancellationToken cancellationToken = default)
         {
-            var resultado = await _integracaoAplicacaoServico.ObterRespostaTreinamentoAsync(cancellationToken);
+            var resultado = await _integracaoAplicacaoServico.ObterRespostaTreinamentoAsync(request.Pergunta, cancellationToken);
             return resultado.Sucesso
                 ? ResultadoOperacao<object>.GerarSucesso(resultado.Resultado, resultado.Mensagem)
                 : ResultadoOperacao<object>.GerarErro(resultado.Mensagem, resultado.StatusCodigo, resultado.Resultado);

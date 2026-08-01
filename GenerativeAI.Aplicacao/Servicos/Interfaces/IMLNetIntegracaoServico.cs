@@ -6,7 +6,7 @@ namespace GenerativeAI.Aplicacao.Servicos.Interfaces
     {
         Task<ResultadoOperacao<object>> GerarTreinamentoAsync(CancellationToken cancellationToken);
         Task<ResultadoOperacao<object>> ObterTreinamentoAsync(CancellationToken cancellationToken);
-        Task<ResultadoOperacao<object>> ObterRespostaTreinamentoAsync(CancellationToken cancellationToken);
+        Task<ResultadoOperacao<object>> ObterRespostaTreinamentoAsync(string pergunta, CancellationToken cancellationToken);
         Task<ResultadoOperacao<object>> AtualizarTreinamentoAsync(CancellationToken cancellationToken);
         Task<ResultadoOperacao<object>> ObterSessoesAsync(CancellationToken cancellationToken);
     }
