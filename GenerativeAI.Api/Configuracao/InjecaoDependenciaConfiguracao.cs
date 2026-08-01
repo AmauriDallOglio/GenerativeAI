@@ -1,0 +1,37 @@
+﻿using GenerativeAI.Aplicacao.Rotas.IntegracaoRota;
+using GenerativeAI.Aplicacao.Servicos;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
+using GenerativeAI.Aplicacao.Util;
+using GenerativeAI.Servico.Servicos;
+using Microsoft.AspNetCore.Mvc;
+
+namespace GenerativeAI.Api.Configuracao
+{
+    public static class InjecaoDependenciaConfiguracao
+    {
+        public static void RegistrarServicos(WebApplicationBuilder builder)
+        {
+
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            builder.Services.AddScoped<IRagIntegracaoServico>(sp => sp.GetRequiredService<RagIntegracao>());
+            builder.Services.AddScoped<IMLNetIntegracaoServico>(sp => sp.GetRequiredService<MlNetIntegracao>());
+            builder.Services.AddScoped<IntegracaoAplicacaoServico>();
+
+            builder.Services.AddScoped<IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>>, ObterTodosRagHandler>();
+            builder.Services.AddScoped<IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>>, ImportarDocumentoRagHandler>();
+            builder.Services.AddScoped<IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>>, GerarTreinamentoHandler>();
+            builder.Services.AddScoped<IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>>, ObterTreinamentoHandler>();
+            builder.Services.AddScoped<IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>>,ObterRespostaTreinamentoHandler>();
+            builder.Services.AddScoped<IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>>, AtualizarTreinamentoHandler>();
+            builder.Services.AddScoped<IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>>, ObterSessoesHandler>();
+
+
+
+        }
+    }
+}
