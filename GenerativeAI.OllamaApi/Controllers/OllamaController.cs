@@ -1,8 +1,8 @@
-﻿using GenerativeAI.Aplicacao.Util;
+﻿using GenerativeAI.Aplicacao.Servicos;
+using GenerativeAI.Aplicacao.Util;
 using GenerativeAI.Servico;
 using GenerativeAI.Servico.Dto;
 using GenerativeAI.Servico.Prompt;
-using GenerativeAI.Servico.Servicos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,11 +13,11 @@ namespace GenerativeAI.OllamaApi.Controllers
     public class OllamaController : ControllerBase
     {
         private readonly ILogger<OllamaController> _logger;
-        private readonly OllamaHttpServico _OllamaServico;
+        private readonly OllamaAplicacaoServico _ollamaAplicacaoServico;
 
-        public OllamaController(OllamaHttpServico ollamaServico, ILogger<OllamaController> logger)
+        public OllamaController(OllamaAplicacaoServico ollamaAplicacaoServico, ILogger<OllamaController> logger)
         {
-            _OllamaServico = ollamaServico;
+            _ollamaAplicacaoServico = ollamaAplicacaoServico;
             _logger = logger;
         }
 
@@ -28,10 +28,7 @@ namespace GenerativeAI.OllamaApi.Controllers
             _logger.LogWarning("[Middleware iniciou com um warning]");
             _logger.LogError("[Middleware iniciou com erro simulado]");
 
-            if (string.IsNullOrWhiteSpace(texto))
-                return BadRequest(ResultadoOperacao<string>.Falha("Informe uma pergunta válida."));
-
-            var resultado = await _OllamaServico.PerguntarAsync(texto);
+            var resultado = await _ollamaAplicacaoServico.PerguntarAsync(texto);
 
             if (!resultado.Sucesso)
                 return StatusCode(500, resultado);
@@ -59,7 +56,7 @@ namespace GenerativeAI.OllamaApi.Controllers
 
             string texto = promptDto.FormataToString();
 
-            var resultado = await _OllamaServico.PerguntarAsync(texto);
+            var resultado = await _ollamaAplicacaoServico.PerguntarAsync(texto);
 
             if (!resultado.Sucesso)
                 return StatusCode(500, resultado);
@@ -104,7 +101,7 @@ namespace GenerativeAI.OllamaApi.Controllers
             PromptDto promptDto = new PromptEngineering().PromptOrdemServicoHtml(prompt, "Amauri");
 
             String texto = promptDto.FormataToString();
-            var resultado = await _OllamaServico.PerguntarAsync(texto);
+            var resultado = await _ollamaAplicacaoServico.PerguntarAsync(texto);
 
             if (!resultado.Sucesso)
                 return StatusCode(500, resultado);

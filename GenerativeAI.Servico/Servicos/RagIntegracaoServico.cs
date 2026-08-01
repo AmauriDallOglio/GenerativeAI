@@ -1,4 +1,5 @@
 using GenerativeAI.Aplicacao.Dto;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
 using GenerativeAI.Aplicacao.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -6,12 +7,12 @@ using System.Net.Http.Headers;
 
 namespace GenerativeAI.Servico.Servicos
 {
-    public class RagServico
+    public class RagIntegracao : IRagIntegracaoServico
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public RagServico(HttpClient httpClient, IOptions<AppSettingsDto> options)
+        public RagIntegracao(HttpClient httpClient, IOptions<AppSettingsDto> options)
         {
             _httpClient = httpClient;
             _apiKey = options.Value.Rag.ApiKey;
@@ -23,13 +24,8 @@ namespace GenerativeAI.Servico.Servicos
             return await BuildResultadoAsync(response, "Consulta ao RAG enviada com sucesso.", cancellationToken);
         }
 
-        public async Task<ResultadoOperacao<object>> ImportarDocumentoAsync(IFormFile arquivo, CancellationToken cancellationToken = default)
+        public async Task<ResultadoOperacao<object>> ImportarDocumentoAsync(IFormFile arquivo, CancellationToken cancellationToken)
         {
-            if (arquivo is null || arquivo.Length == 0)
-            {
-                return ResultadoOperacao<object>.GerarErro("Arquivo inválido para importação no RAG.", StatusCodes.Status400BadRequest);
-            }
-
             await using var stream = arquivo.OpenReadStream();
             using var content = new MultipartFormDataContent();
             using var fileContent = new StreamContent(stream);

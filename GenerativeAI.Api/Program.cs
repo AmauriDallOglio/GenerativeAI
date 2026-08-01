@@ -1,4 +1,7 @@
 using GenerativeAI.Aplicacao.Dto;
+using GenerativeAI.Aplicacao.Servicos;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
+using GenerativeAI.Aplicacao.Util;
 using GenerativeAI.Servico;
 using GenerativeAI.Servico.Servicos;
 
@@ -37,17 +40,29 @@ namespace GenerativeAI.Api
                 return new GenerativeModel(apiKey: apiKey, model: "gemini-2.5-flash");
             });
 
-            builder.Services.AddHttpClient<RagServico>(client =>
+            builder.Services.AddHttpClient<RagIntegracao>(client =>
             {
                 client.BaseAddress = new Uri(builder.Configuration["Apis:Rag:Url"] ?? "https://localhost:7001");
             });
 
-            builder.Services.AddHttpClient<MLNetServico>(client =>
+            builder.Services.AddHttpClient<MlNetIntegracao>(client =>
             {
                 client.BaseAddress = new Uri(builder.Configuration["Apis:MLNet:Url"] ?? "https://localhost:7002");
             });
 
 
+
+            builder.Services.AddScoped<IRagIntegracaoServico>(sp => sp.GetRequiredService<RagIntegracao>());
+            builder.Services.AddScoped<IMLNetIntegracaoServico>(sp => sp.GetRequiredService<MlNetIntegracao>());
+            builder.Services.AddScoped<IntegracaoAplicacaoServico>();
+
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterTodosRagRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterTodosRagHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ImportarDocumentoRagRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ImportarDocumentoRagHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.GerarTreinamentoRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.GerarTreinamentoHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterTreinamentoRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterTreinamentoHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterRespostaTreinamentoRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterRespostaTreinamentoHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.AtualizarTreinamentoRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.AtualizarTreinamentoHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Util.IContratoBaseHandler<GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterSessoesRequest, GenerativeAI.Aplicacao.Util.ResultadoOperacao<object>>, GenerativeAI.Aplicacao.Rotas.IntegracaoRota.ObterSessoesHandler>();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

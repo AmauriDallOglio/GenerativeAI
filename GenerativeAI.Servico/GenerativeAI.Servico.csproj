@@ -14,5 +14,4 @@
   <ItemGroup>
     <ProjectReference Include="..\GenerativeAI.Aplicacao\GenerativeAI.Aplicacao.csproj" />
   </ItemGroup>
-
 </Project>

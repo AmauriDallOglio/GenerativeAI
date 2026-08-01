@@ -1,15 +1,16 @@
 using GenerativeAI.Aplicacao.Dto;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
 using GenerativeAI.Aplicacao.Util;
 using Microsoft.Extensions.Options;
 
 namespace GenerativeAI.Servico.Servicos
 {
-    public class MLNetServico
+    public class MlNetIntegracao : IMLNetIntegracaoServico
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public MLNetServico(HttpClient httpClient, IOptions<AppSettingsDto> options)
+        public MlNetIntegracao(HttpClient httpClient, IOptions<AppSettingsDto> options)
         {
             _httpClient = httpClient;
             _apiKey = options.Value.MLNet.ApiKey;

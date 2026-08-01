@@ -1,4 +1,5 @@
-﻿using GenerativeAI.Aplicacao.Util;
+﻿using GenerativeAI.Aplicacao.Servicos.Interfaces;
+using GenerativeAI.Aplicacao.Util;
 using GenerativeAI.Servico.Dto;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,12 +8,12 @@ using System.Text.Json;
 
 namespace GenerativeAI.Servico.Servicos
 {
-    public class OllamaHttpServico
+    public class OllamaIntegracaoServico : IOllamaPerguntaServico
     {
         private readonly HttpClient _httpClient;
         private readonly OllamaAppSettingsDto _OllamaAppSettingsDto;
-        private readonly ILogger<OllamaHttpServico> _logger;
-        public OllamaHttpServico(HttpClient httpClient, IOptions<OllamaAppSettingsDto> ollamaAppSettingsDto, ILogger<OllamaHttpServico> logger)
+        private readonly ILogger<OllamaIntegracaoServico> _logger;
+        public OllamaIntegracaoServico(HttpClient httpClient, IOptions<OllamaAppSettingsDto> ollamaAppSettingsDto, ILogger<OllamaIntegracaoServico> logger)
         {
             _httpClient = httpClient;
             _OllamaAppSettingsDto = ollamaAppSettingsDto.Value;

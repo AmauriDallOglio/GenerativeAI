@@ -1,4 +1,6 @@
 
+using GenerativeAI.Aplicacao.Servicos;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
 using GenerativeAI.OllamaApi.Util;
 using GenerativeAI.Servico.Dto;
 using GenerativeAI.Servico.Servicos;
@@ -13,12 +15,13 @@ namespace GenerativeAI.OllamaApi
  
             builder.Services.Configure<OllamaAppSettingsDto>(builder.Configuration.GetSection("Ollama"));
  
-            builder.Services.AddHttpClient<OllamaHttpServico>();
+            builder.Services.AddHttpClient<OllamaIntegracaoServico>();
+            builder.Services.AddScoped<IOllamaPerguntaServico>(sp => sp.GetRequiredService<OllamaIntegracaoServico>());
+            builder.Services.AddScoped<OllamaAplicacaoServico>();
 
- 
             builder.Services.AddControllers();
 
-            //Swagger configurado com título e descrição
+            //Swagger configurado com tï¿½tulo e descriï¿½ï¿½o
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -26,7 +29,7 @@ namespace GenerativeAI.OllamaApi
                 {
                     Title = "Ollama API",
                     Version = "v1",
-                    Description = "API de integração com o Ollama (Llama3.2)"
+                    Description = "API de integraï¿½ï¿½o com o Ollama (Llama3.2)"
                 });
             });
  
