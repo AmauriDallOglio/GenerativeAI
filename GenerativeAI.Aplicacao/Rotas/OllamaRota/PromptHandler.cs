@@ -6,9 +6,9 @@ namespace GenerativeAI.Aplicacao.Rotas.OllamaRota
 {
     public class PromptHandler : IContratoBaseHandler<PromptRequest, ResultadoOperacao<object>>
     {
-        private readonly IOllamaServico _ollamaServico;
+        private readonly IOllamaIntegracaoServico _ollamaServico;
 
-        public PromptHandler(IOllamaServico ollamaServico)
+        public PromptHandler(IOllamaIntegracaoServico ollamaServico)
         {
             _ollamaServico = ollamaServico;
         }
@@ -20,13 +20,13 @@ namespace GenerativeAI.Aplicacao.Rotas.OllamaRota
             if (string.IsNullOrWhiteSpace(request.Pergunta))
             {
                 tempo.Stop();
-                return ResultadoOperacao<object>.GerarErro("Campos devem ser informados!", 400);
+                return ResultadoOperacao<object>.GerarErro("A pergunta deve ser informada.", 400);
             }
+ 
 
             var resposta = await _ollamaServico.ExecutarPromptAsync(request.Pergunta, cancellationToken);
 
             tempo.Stop();
-
             if (!string.IsNullOrEmpty(resposta))
             {
                 var response = PromptResponse.Criar(request.Pergunta, resposta, tempo.ElapsedMilliseconds);
@@ -34,7 +34,7 @@ namespace GenerativeAI.Aplicacao.Rotas.OllamaRota
             }
             else
             {
-                return ResultadoOperacao<object>.GerarErro("Não foi possível gerar resposta.", 500);
+                return ResultadoOperacao<object>.GerarErro($"Não foi possível gerar resposta. {tempo.ElapsedMilliseconds}", 500);
             }
         }
     }

@@ -1,13 +1,14 @@
 using GenerativeAI.Aplicacao.Servicos;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
 using GenerativeAI.Aplicacao.Util;
 
 namespace GenerativeAI.Aplicacao.Rotas.IntegracaoRota
 {
     public class ObterTreinamentoHandler : IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>>
     {
-        private readonly IntegracaoAplicacaoServico _integracaoAplicacaoServico;
+        private readonly IMLNetIntegracaoServico _integracaoAplicacaoServico;
 
-        public ObterTreinamentoHandler(IntegracaoAplicacaoServico integracaoAplicacaoServico)
+        public ObterTreinamentoHandler(IMLNetIntegracaoServico integracaoAplicacaoServico)
         {
             _integracaoAplicacaoServico = integracaoAplicacaoServico;
         }

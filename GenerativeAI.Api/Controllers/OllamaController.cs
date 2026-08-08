@@ -1,4 +1,5 @@
-﻿using GenerativeAI.Aplicacao.Util;
+﻿using GenerativeAI.Aplicacao.Rotas.OllamaRota;
+using GenerativeAI.Aplicacao.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenerativeAI.Api.Controllers
@@ -10,70 +11,48 @@ namespace GenerativeAI.Api.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly PromptHandler _PromptHandler;
         private readonly PromptGenerativoHandler _PromptGenerativoHandler;
-        private readonly ISessaoMemoriaServico _ISessaoMemoriaServico;
-        private readonly PromptGenerativoDadosMocadosHandler _PromptGenerativoDadosMocadosHandler;
+ 
+
         public OllamaController(
-            ISessaoMemoriaServico iSessaoMemoriaServico,
             IWebHostEnvironment env,
             PromptHandler promptHandler,
-            PromptGenerativoHandler promptGenerativoHandler,
-            PromptGenerativoDadosMocadosHandler promptGenerativoDadosMocadosHandler
+            PromptGenerativoHandler promptGenerativoHandler
             )
         {
-            _ISessaoMemoriaServico = iSessaoMemoriaServico;
             _env = env;
             _PromptHandler = promptHandler;
             _PromptGenerativoHandler = promptGenerativoHandler;
-            _PromptGenerativoDadosMocadosHandler = promptGenerativoDadosMocadosHandler;
         }
 
 
-        //[Authorize(Policy = "ollama.prompt")]
-        [HttpGet("Prompt")]
-        public async Task<IActionResult?> Prompt([FromQuery] PromptRequest request, CancellationToken cancellationToken)
+
+        [HttpPost("Prompt")]
+        public async Task<IActionResult> Prompt([FromBody] PromptRequest? request, CancellationToken cancellationToken)
         {
-            ResultadoOperacao resultado = await _PromptHandler.Executar(request, cancellationToken);
+            ResultadoOperacao<object> resultado = await _PromptHandler.Executar(request, cancellationToken);
 
             if (resultado.Sucesso)
-                return Ok(resultado.Resultado);
-            else
-                return BadRequest(resultado.Mensagem);
+                return Ok(resultado.Resultado ?? resultado);
+
+            return StatusCode(resultado.StatusCodigo ?? StatusCodes.Status500InternalServerError,
+                new { mensagem = resultado.Mensagem });
         }
 
-        //[Authorize(Policy = "ollama.prompt")]
-        [HttpGet("PromptGenerativo")]
-        public async Task<IActionResult> PromptGenerativo([FromQuery] PromptGenerativoRequest request, CancellationToken cancellationToken)
+
+        [HttpPost("PromptGenerativo")]
+        public async Task<IActionResult> PromptGenerativo([FromBody] PromptGenerativoRequest? request, CancellationToken cancellationToken)
         {
-            ResultadoOperacao resultado = await _PromptGenerativoHandler.Executar(request, cancellationToken);
+            ResultadoOperacao<object> resultado = await _PromptGenerativoHandler.Executar(request, cancellationToken);
 
             if (resultado.Sucesso)
-                return Ok(resultado.Resultado);
-            else
-                return BadRequest(resultado);
+                return Ok(resultado.Resultado ?? resultado);
+
+            return StatusCode(resultado.StatusCodigo ?? StatusCodes.Status500InternalServerError,
+                new { mensagem = resultado.Mensagem });
         }
 
 
-        //[Authorize(Policy = "ollama.read")]
-        [HttpGet("ObterMemoria")]
-        public async Task<IActionResult> ObterMemoria(CancellationToken cancellationToken)
-        {
-            var logs = await _ISessaoMemoriaServico.ObterTodosAsync(cancellationToken);
-            return Ok(logs);
-        }
 
-
-        //[Authorize(Policy = "ollama.prompt")]
-        [HttpGet("PromptGenerativoDadosMocados")]
-        public async Task<IActionResult> PromptGenerativoDadosMocados([FromQuery] PromptGenerativoDadosMocadosRequest request, CancellationToken cancellationToken)
-        {
-            //var request = new PromptGenerativoDadosMocadosRequest { Pergunta = "Amauri" };
-            ResultadoOperacao resultado = await _PromptGenerativoDadosMocadosHandler.Executar(request, cancellationToken);
-
-            if (resultado.Sucesso)
-                return Ok(resultado.Resultado);
-            else
-                return BadRequest(resultado.Mensagem);
-        }
 
     }
 }

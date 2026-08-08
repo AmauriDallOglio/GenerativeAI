@@ -1,4 +1,5 @@
-﻿using GenerativeAI.Aplicacao.Util;
+﻿using GenerativeAI.Aplicacao.Servicos.Interfaces;
+using GenerativeAI.Aplicacao.Util;
 using System.Diagnostics;
 
 namespace GenerativeAI.Aplicacao.Rotas.OllamaRota
@@ -18,8 +19,10 @@ namespace GenerativeAI.Aplicacao.Rotas.OllamaRota
             if (string.IsNullOrWhiteSpace(request.Pergunta))
             {
                 tempo.Stop();
-                return ResultadoOperacao<object>.GerarErro("Campos devem ser informados!", 400);
+                return ResultadoOperacao<object>.GerarErro("A pergunta deve ser informada.", 400);
             }
+
+ 
 
             string resultado = await _generativoPipeline.PerguntarAsync(request.Pergunta, cancellationToken);
             if (string.IsNullOrEmpty(resultado))
@@ -34,7 +37,7 @@ namespace GenerativeAI.Aplicacao.Rotas.OllamaRota
                 PromptGenerativoResponse response = PromptGenerativoResponse.Criar(request.Pergunta, resultado, tempo.ElapsedMilliseconds);
                 return ResultadoOperacao<object>.GerarSucesso(response);
             }
-            return ResultadoOperacao<object>.GerarErro("Não foi possivel gerar resposta.", 500);
+            return ResultadoOperacao<object>.GerarErro($"Não foi possivel gerar resposta. {tempo.ElapsedMilliseconds}", 500);
         }
     }
 }

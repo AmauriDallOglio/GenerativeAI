@@ -26,17 +26,8 @@ namespace GenerativeAI.Api.Controllers
             if (request == null || string.IsNullOrWhiteSpace(request.Pergunta))
                 return BadRequest("A pergunta não pode ser vazia.");
 
-            try
-            {
-                var response = await _model.GenerateContentAsync(request.Pergunta);
-                // return Ok(new { resposta = response.Text() });
-                return Content(response.Text, "application/json");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro na chamada da API Gemini: {ex.Message}");
-                return StatusCode(500, new { error = "Ocorreu um erro ao se comunicar com a API Gemini.", details = ex.Message });
-            }
+            var response = await _model.GenerateContentAsync(request.Pergunta);
+            return Content(response.Text, "application/json");
         }
 
  

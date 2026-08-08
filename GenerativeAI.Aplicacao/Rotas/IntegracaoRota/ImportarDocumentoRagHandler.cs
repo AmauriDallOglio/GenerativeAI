@@ -1,4 +1,5 @@
 using GenerativeAI.Aplicacao.Servicos;
+using GenerativeAI.Aplicacao.Servicos.Interfaces;
 using GenerativeAI.Aplicacao.Util;
 using Microsoft.AspNetCore.Http;
 
@@ -6,9 +7,9 @@ namespace GenerativeAI.Aplicacao.Rotas.IntegracaoRota
 {
     public class ImportarDocumentoRagHandler : IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>>
     {
-        private readonly IntegracaoAplicacaoServico _integracaoAplicacaoServico;
+        private readonly IRagIntegracaoServico _integracaoAplicacaoServico;
 
-        public ImportarDocumentoRagHandler(IntegracaoAplicacaoServico integracaoAplicacaoServico)
+        public ImportarDocumentoRagHandler(IRagIntegracaoServico integracaoAplicacaoServico)
         {
             _integracaoAplicacaoServico = integracaoAplicacaoServico;
         }

@@ -2,9 +2,9 @@
 {
     public static class MiddlewareLogExtensions
     {
-        public static IApplicationBuilder UseMiddlewareLog(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseRegistroMiddleware(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<MiddlewareLog>();
+            return builder.UseMiddleware<RegistroMiddleware>();
         }
     }
 }

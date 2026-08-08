@@ -9,22 +9,22 @@ namespace GenerativeAI.Api.Controllers
     [Route("api/[controller]")]
     public class IntegracaoController : ControllerBase
     {
-        private readonly IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>> _obterTodosRagHandler;
-        private readonly IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>> _importarDocumentoRagHandler;
-        private readonly IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>> _gerarTreinamentoHandler;
-        private readonly IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>> _obterTreinamentoHandler;
-        private readonly IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>> _obterRespostaTreinamentoHandler;
-        private readonly IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>> _atualizarTreinamentoHandler;
-        private readonly IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>> _obterSessoesHandler;
+        private readonly ObterTodosRagHandler _obterTodosRagHandler;
+        private readonly ImportarDocumentoRagHandler _importarDocumentoRagHandler;
+        private readonly GerarTreinamentoHandler _gerarTreinamentoHandler;
+        private readonly ObterTreinamentoHandler _obterTreinamentoHandler;
+        private readonly ObterRespostaTreinamentoHandler _obterRespostaTreinamentoHandler;
+        private readonly AtualizarTreinamentoHandler _atualizarTreinamentoHandler;
+        private readonly ObterSessoesHandler _obterSessoesHandler;
 
         public IntegracaoController(
-            IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>> obterTodosRagHandler,
-            IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>> importarDocumentoRagHandler,
-            IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>> gerarTreinamentoHandler,
-            IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>> obterTreinamentoHandler,
-            IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>> obterRespostaTreinamentoHandler,
-            IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>> atualizarTreinamentoHandler,
-            IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>> obterSessoesHandler)
+            ObterTodosRagHandler obterTodosRagHandler,
+            ImportarDocumentoRagHandler importarDocumentoRagHandler,
+            GerarTreinamentoHandler gerarTreinamentoHandler,
+            ObterTreinamentoHandler obterTreinamentoHandler,
+            ObterRespostaTreinamentoHandler obterRespostaTreinamentoHandler,
+            AtualizarTreinamentoHandler atualizarTreinamentoHandler,
+            ObterSessoesHandler obterSessoesHandler)
         {
             _obterTodosRagHandler = obterTodosRagHandler;
             _importarDocumentoRagHandler = importarDocumentoRagHandler;
@@ -34,6 +34,31 @@ namespace GenerativeAI.Api.Controllers
             _atualizarTreinamentoHandler = atualizarTreinamentoHandler;
             _obterSessoesHandler = obterSessoesHandler;
         }
+        //private readonly IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>> _obterTodosRagHandler;
+        //private readonly IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>> _importarDocumentoRagHandler;
+        //private readonly IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>> _gerarTreinamentoHandler;
+        //private readonly IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>> _obterTreinamentoHandler;
+        //private readonly IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>> _obterRespostaTreinamentoHandler;
+        //private readonly IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>> _atualizarTreinamentoHandler;
+        //private readonly IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>> _obterSessoesHandler;
+
+        //public IntegracaoController(
+        //    IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>> obterTodosRagHandler,
+        //    IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>> importarDocumentoRagHandler,
+        //    IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>> gerarTreinamentoHandler,
+        //    IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>> obterTreinamentoHandler,
+        //    IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>> obterRespostaTreinamentoHandler,
+        //    IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>> atualizarTreinamentoHandler,
+        //    IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>> obterSessoesHandler)
+        //{
+        //    _obterTodosRagHandler = obterTodosRagHandler;
+        //    _importarDocumentoRagHandler = importarDocumentoRagHandler;
+        //    _gerarTreinamentoHandler = gerarTreinamentoHandler;
+        //    _obterTreinamentoHandler = obterTreinamentoHandler;
+        //    _obterRespostaTreinamentoHandler = obterRespostaTreinamentoHandler;
+        //    _atualizarTreinamentoHandler = atualizarTreinamentoHandler;
+        //    _obterSessoesHandler = obterSessoesHandler;
+        //}
 
         [HttpGet("Rag/ObterTodos")]
         public async Task<IActionResult> ConsultarRag([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)

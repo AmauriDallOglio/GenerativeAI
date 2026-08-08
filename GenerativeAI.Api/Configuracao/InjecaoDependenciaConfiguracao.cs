@@ -19,25 +19,50 @@ namespace GenerativeAI.Api.Configuracao
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-            builder.Services.AddScoped<IRagIntegracaoServico>(sp => sp.GetRequiredService<RagIntegracao>());
-            builder.Services.AddScoped<IMLNetIntegracaoServico>(sp => sp.GetRequiredService<MlNetIntegracao>());
-            builder.Services.AddScoped<IntegracaoAplicacaoServico>();
 
-            builder.Services.AddScoped<IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>>, ObterTodosRagHandler>();
-            builder.Services.AddScoped<IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>>, ImportarDocumentoRagHandler>();
-            builder.Services.AddScoped<IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>>, GerarTreinamentoHandler>();
-            builder.Services.AddScoped<IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>>, ObterTreinamentoHandler>();
-            builder.Services.AddScoped<IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>>,ObterRespostaTreinamentoHandler>();
-            builder.Services.AddScoped<IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>>, AtualizarTreinamentoHandler>();
-            builder.Services.AddScoped<IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>>, ObterSessoesHandler>();
+            //Rotas 
+            // Serviços principais
+            builder.Services.AddScoped<IRagIntegracaoServico, RagIntegracao>();
+            builder.Services.AddScoped<IMLNetIntegracaoServico, MlNetIntegracao>();
+            builder.Services.AddScoped<IOllamaIntegracaoServico, OllamaIntegracaoServico>();
+            builder.Services.AddScoped<IGenerativoPipelineServico, GenerativoPipelineServico>();
 
-            //Ollama
- 
-            builder.Services.AddScoped<IContratoBaseHandler<PromptRequest, ResultadoOperacao<object>>, PromptHandler>();
+            // Handlers concretos (sem interface genérica)
+            builder.Services.AddScoped<ObterTodosRagHandler>();
+            builder.Services.AddScoped<ImportarDocumentoRagHandler>();
+            builder.Services.AddScoped<GerarTreinamentoHandler>();
+            builder.Services.AddScoped<ObterTreinamentoHandler>();
+            builder.Services.AddScoped<ObterRespostaTreinamentoHandler>();
+            builder.Services.AddScoped<AtualizarTreinamentoHandler>();
+            builder.Services.AddScoped<ObterSessoesHandler>();
 
-   
+            //builder.Services.AddScoped<IContratoBaseHandler<PromptRequest, ResultadoOperacao<object>>, PromptHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>>, ObterTodosRagHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>>, ImportarDocumentoRagHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<GerarTreinamentoRequest, ResultadoOperacao<object>>, GerarTreinamentoHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<ObterTreinamentoRequest, ResultadoOperacao<object>>, ObterTreinamentoHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<ObterRespostaTreinamentoRequest, ResultadoOperacao<object>>, ObterRespostaTreinamentoHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<AtualizarTreinamentoRequest, ResultadoOperacao<object>>, AtualizarTreinamentoHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<ObterSessoesRequest, ResultadoOperacao<object>>, ObterSessoesHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<PromptRequest, ResultadoOperacao<object>>, PromptHandler>();
+            //builder.Services.AddScoped<IContratoBaseHandler<PromptGenerativoRequest, ResultadoOperacao<object>>, PromptGenerativoHandler>();
+
+            //Classe concreta (sem interface).
             builder.Services.AddScoped<PromptHandler>();
             builder.Services.AddScoped<PromptGenerativoHandler>();
+
+
+            //Serviços de integração
+            builder.Services.AddScoped<IRagIntegracaoServico>(sp => sp.GetRequiredService<RagIntegracao>());
+            builder.Services.AddScoped<IMLNetIntegracaoServico>(sp => sp.GetRequiredService<MlNetIntegracao>());
+            builder.Services.AddScoped<IGenerativoPipelineServico, GenerativoPipelineServico>();
+            //builder.Services.AddHttpClient<OllamaIntegracaoServico>();
+            builder.Services.AddScoped<IOllamaIntegracaoServico, OllamaIntegracaoServico>();
+
+  
+
+
+
 
  
 
@@ -47,13 +72,8 @@ namespace GenerativeAI.Api.Configuracao
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
-
-            builder.Services.AddHttpClient<OllamaServico>();
  
-            builder.Services.AddScoped<IOllamaServico, OllamaServico>();
- 
-            builder.Services.AddScoped<IGenerativoPipelineServico, GenerativoPipelineServico>();
-
+   
  
 
 

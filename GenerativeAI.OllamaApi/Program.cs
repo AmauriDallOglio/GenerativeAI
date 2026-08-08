@@ -1,6 +1,7 @@
 
 using GenerativeAI.Aplicacao.Servicos;
 using GenerativeAI.Aplicacao.Servicos.Interfaces;
+using GenerativeAI.OllamaApi.Middleware;
 using GenerativeAI.OllamaApi.Util;
 using GenerativeAI.Servico.Dto;
 using GenerativeAI.Servico.Servicos;
@@ -16,7 +17,7 @@ namespace GenerativeAI.OllamaApi
             builder.Services.Configure<OllamaAppSettingsDto>(builder.Configuration.GetSection("Ollama"));
  
             builder.Services.AddHttpClient<OllamaIntegracaoServico>();
-            builder.Services.AddScoped<IOllamaPerguntaServico>(sp => sp.GetRequiredService<OllamaIntegracaoServico>());
+            builder.Services.AddScoped<IOllamaIntegracaoServico>(sp => sp.GetRequiredService<OllamaIntegracaoServico>());
             builder.Services.AddScoped<OllamaAplicacaoServico>();
 
             builder.Services.AddControllers();
@@ -51,7 +52,7 @@ namespace GenerativeAI.OllamaApi
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
-            app.UseMiddlewareLog();
+            app.UseMiddlewaresApi();
 
             app.UseHttpsRedirection();
             app.UseRouting();

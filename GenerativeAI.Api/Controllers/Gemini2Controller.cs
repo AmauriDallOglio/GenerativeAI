@@ -22,16 +22,8 @@ namespace GenerativeAI.Api.Controllers
                 return BadRequest(new { error = "O campo 'pergunta' não pode ser vazio." });
             }
 
-            try
-            {
-                var response = await _model.GenerateContentAsync(request.Pergunta);
-                return Ok(new { resposta = response.Text() });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro na chamada da API Gemini: {ex.Message}");
-                return StatusCode(500, new { error = "Ocorreu um erro ao se comunicar com a API Gemini.", details = ex.Message });
-            }
+            var response = await _model.GenerateContentAsync(request.Pergunta);
+            return Ok(new { resposta = response.Text() });
         }
 
 
@@ -42,9 +34,8 @@ namespace GenerativeAI.Api.Controllers
             {
                 return BadRequest(new { error = "O campo 'pergunta' não pode ser vazio." });
             }
-            try
-            {
-                string promptFinal = $@"
+
+            string promptFinal = $@"
                 Você é um assistente especialista em carros. Sua única função é responder a perguntas sobre veículos usando ESTRITAMENTE as informações fornecidas no contexto abaixo.
                 Se a resposta não estiver no contexto, diga apenas: 'Desculpe, não encontrei informações sobre isso na minha base de dados.'
                 Não use nenhum conhecimento externo.
@@ -54,14 +45,8 @@ namespace GenerativeAI.Api.Controllers
                 Resposta:
                 ";
 
-                var response = await _model.GenerateContentAsync(promptFinal);
-                return Ok(new { resposta = response.Text() });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro na chamada da API Gemini: {ex.Message}");
-                return StatusCode(500, new { error = "Ocorreu um erro ao se comunicar com a API Gemini.", details = ex.Message });
-            }
+            var response = await _model.GenerateContentAsync(promptFinal);
+            return Ok(new { resposta = response.Text() });
         }
 
     }

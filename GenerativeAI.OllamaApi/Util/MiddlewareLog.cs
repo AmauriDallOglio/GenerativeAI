@@ -1,14 +1,14 @@
 ﻿namespace GenerativeAI.OllamaApi.Util
 {
-    public class MiddlewareLog
+    public class RegistroMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public MiddlewareLog(RequestDelegate next, ILoggerFactory logFactory)
+        public RegistroMiddleware(RequestDelegate next, ILoggerFactory logFactory)
         {
             _next = next;
-            _logger = logFactory.CreateLogger("MiddlewareLog");
+            _logger = logFactory.CreateLogger("RegistroMiddleware");
             _logger.LogInformation("[Middleware foi iniciado]...");
             _logger.LogWarning("[Middleware foi iniciado em warning]...");
             _logger.LogError("[Middleware foi iniciado com erros]...");

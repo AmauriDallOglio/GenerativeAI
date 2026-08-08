@@ -1,4 +1,5 @@
 using GenerativeAI.Api.Configuracao;
+using GenerativeAI.Api.Middleware;
 
 namespace GenerativeAI.Api
 {
@@ -35,11 +36,17 @@ namespace GenerativeAI.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
 
             var app = builder.Build();
             app.UseSwagger();
             app.UseSwaggerUI();
-        
+            app.UseSession();
+ 
+            app.ConfigurarMiddlewaresApi();
+
+
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();

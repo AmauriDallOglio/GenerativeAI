@@ -9,7 +9,7 @@ namespace GenerativeAI.Aplicacao.Servicos
     public class GenerativoPipelineServico : IGenerativoPipelineServico
     {
 
-        private readonly IOllamaServico _ollamaServico;
+        private readonly IOllamaIntegracaoServico _ollamaServico;
         private readonly IMLNetIntegracaoServico _machineLearningServico;
         private readonly IRagIntegracaoServico _ragServico;
         private readonly IPrintaConsole<GenerativoPipelineServico> _printaConsole;
@@ -17,7 +17,7 @@ namespace GenerativeAI.Aplicacao.Servicos
 
         public GenerativoPipelineServico(
 
-            IOllamaServico ollamaServico,
+            IOllamaIntegracaoServico ollamaServico,
             IMLNetIntegracaoServico machineLearningServico,
             IRagIntegracaoServico ragServico,
             IPrintaConsole<GenerativoPipelineServico> printaConsole)
@@ -28,12 +28,22 @@ namespace GenerativeAI.Aplicacao.Servicos
             _printaConsole = printaConsole;
             _ragServico = ragServico;
 
-            if (_cacheSistemaDto == null)
+            _ = Task.Run(async () =>
             {
-                var resultadoRag = _ragServico.ObterTodosAsync(1, 1000, new CancellationToken());
-                _cacheSistemaDto = resultadoRag;
-            }
-
+                try
+                {
+                    var resultadoRag = await _ragServico.ObterTodosAsync(1, 1000, CancellationToken.None);
+                    if (resultadoRag?.Sucesso == true && resultadoRag.Resultado is RagCacheDto cache)
+                    {
+                        _cacheSistemaDto.Documentos = cache.Documentos;
+                        _cacheSistemaDto.DocumentosTrechos = cache.DocumentosTrechos;
+                    }
+                }
+                catch
+                {
+                    // Ignora falhas de inicialização do cache e mantém o comportamento atual.
+                }
+            });
 
 
         }
