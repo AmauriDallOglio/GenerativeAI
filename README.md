@@ -1,8 +1,9 @@
 # GenerativeAI
 
-O projeto GenerativeAI é responsável por centralizar e orquestrar a comunicação entre os serviços internos da solução: RAG, ML.NET, Youtube e Whisper.
+O projeto GenerativeAI é responsável por centralizar e orquestrar a comunicação entre os serviços internos da solução: RAG, ML.NET, Youtube e Whisper. O projeto implementa um agente orquestrador baseado em APIs, onde cada serviço integrado atua como uma ferramenta especializada.
 
 Ele funciona como uma camada principal de integração. Em vez de o consumidor chamar cada serviço separadamente, o GenerativeAI expõe rotas próprias e encaminha as requisições para os serviços corretos, já aplicando configurações, API Keys e tratamento padronizado de respostas.
+
 
 Responsabilidades
 - Autenticação dos usuários (JWT)
