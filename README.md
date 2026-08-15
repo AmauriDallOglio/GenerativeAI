@@ -5,6 +5,10 @@ O projeto GenerativeAI é responsável por centralizar e orquestrar a comunicaç
 Ele funciona como uma camada principal de integração. Em vez de o consumidor chamar cada serviço separadamente, o GenerativeAI expõe rotas próprias e encaminha as requisições para os serviços corretos, já aplicando configurações, API Keys e tratamento padronizado de respostas.
 
 
+<img width="1536" height="1024" alt="ChatGPT Image 15 de ago  de 2026, 18_17_40" src="https://github.com/user-attachments/assets/f311bd2c-658e-46c7-8645-1a2e75047b99" />
+
+
+
 Responsabilidades
 - Autenticação dos usuários (JWT)
 - Exposição das rotas principais da aplicação.
@@ -18,21 +22,21 @@ Responsabilidades
 <img width="1897" height="1016" alt="image" src="https://github.com/user-attachments/assets/f3b3649d-61dc-4bd8-8092-907509629aa8" />
 
 Serviços Integrados
-- RAG
+- RAG: https://github.com/AmauriDallOglio/RAG
   - Armazena documentos e textos.
   - Permite importar arquivos.
   - Permite importar texto diretamente.
   - Permite consultar os conteúdos já processados.
-- ML.NET
+- ML.NET: https://github.com/AmauriDallOglio/MLNet
   - Gera treinamento.
   - Consulta treinamento existente.
   - Atualiza treinamento.
   - Obtém respostas com base no modelo treinado.
   - Lista sessões.
-- Youtube
+- Youtube: https://github.com/AmauriDallOglio/Youtube
   - Baixa o áudio de vídeos do Youtube.
   - Retorna informações do arquivo gerado, como nome e caminho do áudio.
-- Whisper
+- Whisper: https://github.com/AmauriDallOglio/Whisper
   - Recebe arquivos de áudio.
   - Transcreve áudio para texto.
   - Retorna a transcrição para uso por outros serviços.
