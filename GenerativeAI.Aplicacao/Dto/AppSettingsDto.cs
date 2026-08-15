@@ -4,6 +4,8 @@ namespace GenerativeAI.Aplicacao.Dto
     {
         public ApiConfiguracaoAcessoDto Rag { get; set; } = new();
         public ApiConfiguracaoAcessoDto MLNet { get; set; } = new();
+        public ApiConfiguracaoAcessoDto Youtube { get; set; } = new();
+        public ApiConfiguracaoAcessoDto Whisper { get; set; } = new();
     }
 
     public class ApiConfiguracaoAcessoDto

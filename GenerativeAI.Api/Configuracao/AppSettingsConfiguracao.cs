@@ -38,6 +38,18 @@ namespace GenerativeAI.Api.Configuracao
                 var appSettingsDto = sp.GetRequiredService<AppSettingsDto>();
                 client.BaseAddress = new Uri(appSettingsDto.MLNet.Url ?? "https://localhost:7002");
             });
+
+            services.AddHttpClient<YoutubeIntegracao>((sp, client) =>
+            {
+                var appSettingsDto = sp.GetRequiredService<AppSettingsDto>();
+                client.BaseAddress = new Uri(appSettingsDto.Youtube.Url ?? "https://localhost:7274");
+            });
+
+            services.AddHttpClient<WhisperIntegracao>((sp, client) =>
+            {
+                var appSettingsDto = sp.GetRequiredService<AppSettingsDto>();
+                client.BaseAddress = new Uri(appSettingsDto.Whisper.Url ?? "https://localhost:7193");
+            });
         }
     }
 }

@@ -16,6 +16,8 @@ namespace GenerativeAI.Api.Controllers
         private readonly ObterRespostaTreinamentoHandler _obterRespostaTreinamentoHandler;
         private readonly AtualizarTreinamentoHandler _atualizarTreinamentoHandler;
         private readonly ObterSessoesHandler _obterSessoesHandler;
+        private readonly BaixarAudioYoutubeHandler _baixarAudioYoutubeHandler;
+        private readonly TranscricaoAudioWhisperHandler _transcricaoAudioWhisperHandler;
 
         public IntegracaoController(
             ObterTodosRagHandler obterTodosRagHandler,
@@ -24,7 +26,9 @@ namespace GenerativeAI.Api.Controllers
             ObterTreinamentoHandler obterTreinamentoHandler,
             ObterRespostaTreinamentoHandler obterRespostaTreinamentoHandler,
             AtualizarTreinamentoHandler atualizarTreinamentoHandler,
-            ObterSessoesHandler obterSessoesHandler)
+            ObterSessoesHandler obterSessoesHandler,
+            BaixarAudioYoutubeHandler baixarAudioYoutubeHandler,
+            TranscricaoAudioWhisperHandler transcricaoAudioWhisperHandler)
         {
             _obterTodosRagHandler = obterTodosRagHandler;
             _importarDocumentoRagHandler = importarDocumentoRagHandler;
@@ -33,6 +37,8 @@ namespace GenerativeAI.Api.Controllers
             _obterRespostaTreinamentoHandler = obterRespostaTreinamentoHandler;
             _atualizarTreinamentoHandler = atualizarTreinamentoHandler;
             _obterSessoesHandler = obterSessoesHandler;
+            _baixarAudioYoutubeHandler = baixarAudioYoutubeHandler;
+            _transcricaoAudioWhisperHandler = transcricaoAudioWhisperHandler;
         }
         //private readonly IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>> _obterTodosRagHandler;
         //private readonly IContratoBaseHandler<ImportarDocumentoRagRequest, ResultadoOperacao<object>> _importarDocumentoRagHandler;
@@ -113,6 +119,21 @@ namespace GenerativeAI.Api.Controllers
         {
             var request = new ObterSessoesRequest();
             ResultadoOperacao<object> resultado = await _obterSessoesHandler.Executar(request, cancellationToken);
+            return resultado.Sucesso ? Ok(resultado) : StatusCode(resultado.StatusCodigo ?? StatusCodes.Status502BadGateway, resultado);
+        }
+
+        [HttpPost("Youtube/BaixarAudio")]
+        public async Task<IActionResult> BaixarAudioYoutube([FromBody] BaixarAudioYoutubeRequest request, CancellationToken cancellationToken = default)
+        {
+            ResultadoOperacao<object> resultado = await _baixarAudioYoutubeHandler.Executar(request, cancellationToken);
+            return resultado.Sucesso ? Ok(resultado) : StatusCode(resultado.StatusCodigo ?? StatusCodes.Status502BadGateway, resultado);
+        }
+
+        [HttpPost("Whisper/TranscricaoAudio")]
+        public async Task<IActionResult> TranscricaoAudioWhisper([FromForm] UploadDocumentoRequest request, CancellationToken cancellationToken = default)
+        {
+            var handlerRequest = new TranscricaoAudioWhisperRequest { Arquivo = request?.Arquivo };
+            ResultadoOperacao<object> resultado = await _transcricaoAudioWhisperHandler.Executar(handlerRequest, cancellationToken);
             return resultado.Sucesso ? Ok(resultado) : StatusCode(resultado.StatusCodigo ?? StatusCodes.Status502BadGateway, resultado);
         }
     }

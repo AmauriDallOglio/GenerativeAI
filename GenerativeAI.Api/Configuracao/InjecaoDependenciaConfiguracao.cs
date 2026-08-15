@@ -24,6 +24,8 @@ namespace GenerativeAI.Api.Configuracao
             // Serviços principais
             builder.Services.AddScoped<IRagIntegracaoServico, RagIntegracao>();
             builder.Services.AddScoped<IMLNetIntegracaoServico, MlNetIntegracao>();
+            builder.Services.AddScoped<IYoutubeIntegracaoServico, YoutubeIntegracao>();
+            builder.Services.AddScoped<IWhisperIntegracaoServico, WhisperIntegracao>();
             builder.Services.AddScoped<IOllamaIntegracaoServico, OllamaIntegracaoServico>();
             builder.Services.AddScoped<IGenerativoPipelineServico, GenerativoPipelineServico>();
 
@@ -35,6 +37,8 @@ namespace GenerativeAI.Api.Configuracao
             builder.Services.AddScoped<ObterRespostaTreinamentoHandler>();
             builder.Services.AddScoped<AtualizarTreinamentoHandler>();
             builder.Services.AddScoped<ObterSessoesHandler>();
+            builder.Services.AddScoped<BaixarAudioYoutubeHandler>();
+            builder.Services.AddScoped<TranscricaoAudioWhisperHandler>();
 
             //builder.Services.AddScoped<IContratoBaseHandler<PromptRequest, ResultadoOperacao<object>>, PromptHandler>();
             //builder.Services.AddScoped<IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>>, ObterTodosRagHandler>();
@@ -55,6 +59,8 @@ namespace GenerativeAI.Api.Configuracao
             //Serviços de integração
             builder.Services.AddScoped<IRagIntegracaoServico>(sp => sp.GetRequiredService<RagIntegracao>());
             builder.Services.AddScoped<IMLNetIntegracaoServico>(sp => sp.GetRequiredService<MlNetIntegracao>());
+            builder.Services.AddScoped<IYoutubeIntegracaoServico>(sp => sp.GetRequiredService<YoutubeIntegracao>());
+            builder.Services.AddScoped<IWhisperIntegracaoServico>(sp => sp.GetRequiredService<WhisperIntegracao>());
             builder.Services.AddScoped<IGenerativoPipelineServico, GenerativoPipelineServico>();
             //builder.Services.AddHttpClient<OllamaIntegracaoServico>();
             builder.Services.AddScoped<IOllamaIntegracaoServico, OllamaIntegracaoServico>();
