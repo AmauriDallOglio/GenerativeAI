@@ -1,29 +1,61 @@
 # GenerativeAI
 
-GenerativeAI
+O projeto GenerativeAI é responsável por centralizar e orquestrar a comunicação entre os serviços internos da solução: RAG, ML.NET, Youtube e Whisper. O projeto implementa um agente orquestrador baseado em APIs, onde cada serviço integrado atua como uma ferramenta especializada.
 
-O projeto GenerativeAI é responsável pela orquestração de toda a solução.
+Ele funciona como uma camada principal de integração. Em vez de o consumidor chamar cada serviço separadamente, o GenerativeAI expõe rotas próprias e encaminha as requisições para os serviços corretos, já aplicando configurações, API Keys e tratamento padronizado de respostas.
+
+
+<img width="1536" height="1024" alt="ChatGPT Image 15 de ago  de 2026, 18_17_40" src="https://github.com/user-attachments/assets/f311bd2c-658e-46c7-8645-1a2e75047b99" />
+
+
 
 Responsabilidades
 - Autenticação dos usuários (JWT)
+- Exposição das rotas principais da aplicação.
 - Chamada dos serviços internos
-- Orquestração entre RAG e ML.NET
-- Centralização das configurações
-- Envio automático da API Key
+- Orquestração entre RAG, ML.NET, Youtube e Whisper.
+- Centralização das configurações de URL e API Key dos serviços.
+- Envio automático da API Key no header X-Api-Key.
+- Tratamento das respostas usando ResultadoOperacao
+- Propagação de CancellationToken em operações demoradas.
 
-Demonstra a integração com a API do Gemini do Google para a geração de texto e conversas interativas. O projeto é um aplicativo de console que utiliza a biblioteca oficial do Google para .NET, permitindo que o modelo responda a perguntas e mantenha o contexto de uma conversa.
+<img width="1897" height="1016" alt="image" src="https://github.com/user-attachments/assets/f3b3649d-61dc-4bd8-8092-907509629aa8" />
 
-* IA Generativa: É um tipo de inteligência artificial capaz de criar novos conteúdos, como textos, imagens, sons ou códigos, a partir de grandes volumes de dados aprendidos. Diferente de sistemas que apenas classificam ou recuperam informações, a IA generativa inventa e produz saídas inéditas com base no que recebe como entrada.
+Serviços Integrados
+- RAG: https://github.com/AmauriDallOglio/RAG
+  - Armazena documentos e textos.
+  - Permite importar arquivos.
+  - Permite importar texto diretamente.
+  - Permite consultar os conteúdos já processados.
+- ML.NET: https://github.com/AmauriDallOglio/MLNet
+  - Gera treinamento.
+  - Consulta treinamento existente.
+  - Atualiza treinamento.
+  - Obtém respostas com base no modelo treinado.
+  - Lista sessões.
+- Youtube: https://github.com/AmauriDallOglio/Youtube
+  - Baixa o áudio de vídeos do Youtube.
+  - Retorna informações do arquivo gerado, como nome e caminho do áudio.
+- Whisper: https://github.com/AmauriDallOglio/Whisper
+  - Recebe arquivos de áudio.
+  - Transcreve áudio para texto.
+  - Retorna a transcrição para uso por outros serviços.
 
-* Prompt Engineering: É a prática de estruturar instruções claras e estratégicas (prompts) para orientar a IA generativa a produzir respostas mais úteis, corretas e alinhadas ao objetivo do usuário. Em outras palavras, é a arte de conversar com a IA para extrair o melhor dela. O usuário aplica Prompt Engineering, a IA Generativa executa e gera o resultado.
+ <img width="1821" height="553" alt="image" src="https://github.com/user-attachments/assets/01bd2c43-919b-414a-bbeb-30238399f965" />
 
-  
-* Vá para o site oficial do Google AI Studio: https://aistudio.google.com/.
-* No canto superior esquerdo da tela, procure e clique em "Get API key" (Obter chave de API).
-* Uma nova página será aberta com um botão. Clique em "Create API key in new project" (Criar chave de API em um novo projeto).
-<img width="1520" height="786" alt="image" src="https://github.com/user-attachments/assets/213fd4b7-c5a7-4fc8-9847-ed3509701636" />
+- /api/GenerativeAi/TreinamentoYoutube
+  - Envia uma URL de vídeo para o GenerativeAI.
+  - O GenerativeAI chama o serviço Youtube para baixar o áudio.
+  - Após o download terminar, o arquivo de áudio é enviado ao Whisper.
+  - O Whisper transcreve o áudio para texto.
+  - O texto transcrito é enviado ao RAG.
+  - O RAG importa o texto e gera a estrutura de busca.
+  - O GenerativeAI retorna o resultado final usando o padrão ResultadoOperacao.
+ 
 
----
+
+
+ 
 
 
 
