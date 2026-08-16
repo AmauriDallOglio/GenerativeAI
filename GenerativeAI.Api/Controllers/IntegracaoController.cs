@@ -11,6 +11,7 @@ namespace GenerativeAI.Api.Controllers
     {
         private readonly ObterTodosRagHandler _obterTodosRagHandler;
         private readonly ImportarDocumentoRagHandler _importarDocumentoRagHandler;
+        private readonly ImportarTextoRagHandler _importarTextoRagHandler;
         private readonly GerarTreinamentoHandler _gerarTreinamentoHandler;
         private readonly ObterTreinamentoHandler _obterTreinamentoHandler;
         private readonly ObterRespostaTreinamentoHandler _obterRespostaTreinamentoHandler;
@@ -22,6 +23,7 @@ namespace GenerativeAI.Api.Controllers
         public IntegracaoController(
             ObterTodosRagHandler obterTodosRagHandler,
             ImportarDocumentoRagHandler importarDocumentoRagHandler,
+            ImportarTextoRagHandler importarTextoRagHandler,
             GerarTreinamentoHandler gerarTreinamentoHandler,
             ObterTreinamentoHandler obterTreinamentoHandler,
             ObterRespostaTreinamentoHandler obterRespostaTreinamentoHandler,
@@ -32,6 +34,7 @@ namespace GenerativeAI.Api.Controllers
         {
             _obterTodosRagHandler = obterTodosRagHandler;
             _importarDocumentoRagHandler = importarDocumentoRagHandler;
+            _importarTextoRagHandler = importarTextoRagHandler;
             _gerarTreinamentoHandler = gerarTreinamentoHandler;
             _obterTreinamentoHandler = obterTreinamentoHandler;
             _obterRespostaTreinamentoHandler = obterRespostaTreinamentoHandler;
@@ -79,6 +82,13 @@ namespace GenerativeAI.Api.Controllers
         {
             var handlerRequest = new ImportarDocumentoRagRequest { Arquivo = request?.Arquivo };
             ResultadoOperacao<object> resultado = await _importarDocumentoRagHandler.Executar(handlerRequest, cancellationToken);
+            return resultado.Sucesso ? Ok(resultado) : StatusCode(resultado.StatusCodigo ?? StatusCodes.Status502BadGateway, resultado);
+        }
+
+        [HttpPost("Rag/ImportarTexto")]
+        public async Task<IActionResult> ImportarTexto([FromBody] ImportarTextoRagRequest request, CancellationToken cancellationToken = default)
+        {
+            ResultadoOperacao<object> resultado = await _importarTextoRagHandler.Executar(request, cancellationToken);
             return resultado.Sucesso ? Ok(resultado) : StatusCode(resultado.StatusCodigo ?? StatusCodes.Status502BadGateway, resultado);
         }
 
@@ -136,5 +146,6 @@ namespace GenerativeAI.Api.Controllers
             ResultadoOperacao<object> resultado = await _transcricaoAudioWhisperHandler.Executar(handlerRequest, cancellationToken);
             return resultado.Sucesso ? Ok(resultado) : StatusCode(resultado.StatusCodigo ?? StatusCodes.Status502BadGateway, resultado);
         }
+
     }
 }

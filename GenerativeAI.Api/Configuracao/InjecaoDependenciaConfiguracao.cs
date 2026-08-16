@@ -32,6 +32,7 @@ namespace GenerativeAI.Api.Configuracao
             // Handlers concretos (sem interface genérica)
             builder.Services.AddScoped<ObterTodosRagHandler>();
             builder.Services.AddScoped<ImportarDocumentoRagHandler>();
+            builder.Services.AddScoped<ImportarTextoRagHandler>();
             builder.Services.AddScoped<GerarTreinamentoHandler>();
             builder.Services.AddScoped<ObterTreinamentoHandler>();
             builder.Services.AddScoped<ObterRespostaTreinamentoHandler>();
@@ -39,6 +40,7 @@ namespace GenerativeAI.Api.Configuracao
             builder.Services.AddScoped<ObterSessoesHandler>();
             builder.Services.AddScoped<BaixarAudioYoutubeHandler>();
             builder.Services.AddScoped<TranscricaoAudioWhisperHandler>();
+            builder.Services.AddScoped<GenerativeAI.Aplicacao.Rotas.GenerativeAiRota.TreinamentoYoutubeHandler>();
 
             //builder.Services.AddScoped<IContratoBaseHandler<PromptRequest, ResultadoOperacao<object>>, PromptHandler>();
             //builder.Services.AddScoped<IContratoBaseHandler<ObterTodosRagRequest, ResultadoOperacao<object>>, ObterTodosRagHandler>();
